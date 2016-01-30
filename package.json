@@ -1,0 +1,36 @@
+{
+  "name": "groupme-playlist",
+  "version": "0.2.2",
+  "description": "app for tracking songs from my buddies",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "tbd"
+  },
+  "author": "Pablo Lopez Domowicz",
+  "license": "MIT",
+  "dependencies": {
+    "babel": "^5.8.21",
+    "body-parser": "^1.13.3",
+    "compression": "^1.5.2",
+    "cors": "^2.7.1",
+    "express": "^4.13.3",
+    "groupme": "^0.5.7",
+    "lodash": "^4.1.0",
+    "query-string": "^3.0.0",
+    "request": "^2.69.0",
+    "resource-router-middleware": "^0.5.1"
+  },
+  "bugs": {
+    "url": "tbd"
+  },
+  "homepage": "tbd",
+  "devDependencies": {
+    "babel-cli": "^6.4.5"
+  }
+}
