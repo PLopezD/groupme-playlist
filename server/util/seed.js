@@ -1,29 +1,43 @@
-var User = require('../api/user/userModel');
-var Post = require('../api/post/postModel');
-var Category = require('../api/category/categoryModel');
+var API = require("groupme").Stateless
+var apiKey = require("../config/config").accessCode
+var Post = require("../api/post/postModel")
+var queryString = require('query-string');
+var request = require('request');
 var _ = require('lodash');
 var logger = require('./logger');
 
-logger.log('Seeding the Database');
+var groupId = "19001737"
+var opts = {limit:'100'}
+var allMessages = []
 
-var users = [
-  {username: 'Jimmylo', password: 'test'},
-  {username: 'Xoko', password: 'test'},
-  {username: 'katamon', password: 'test'}
-];
+var urlGen = function (groupId, apiKey,opts) {
+  if (Object.keys(opts).length === 1) {
+    return "https://api.groupme.com/v3/groups/" + groupId + "/messages?token=" + apiKey + "&" + queryString.stringify(opts);
+  }
+  return "https://api.groupme.com/v3/groups/" + groupId + "/messages?token=" + apiKey + "&limit=" + opts.limit + "&before_id=" + opts.before_id;  
+}
+var cleanDB = function() {
+  logger.log('... cleaning the DB');
+  var cleanPromises = [Post]
+  .map(function(model) {
+    return model.remove().exec();
+  });
+  return Promise.all(cleanPromises);
+}
 
-var categories = [
-  {name: 'intros'},
-  {name: 'angular'},
-  {name: 'UI/UX'}
-];
-
-var posts = [
-  {title: 'Learn angular 2 today', text: 'Angular to is so dope'},
-  {title: '10 reasons you should love IE7', text: 'IE7 is so amazing'},
-  {title: 'Why we switched to Go', text: 'go is dope'}
-];
-
+var apiCall = function (url) {
+  return new Promise(function (res,rej) {
+    request(
+    {
+      uri:    url,
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'}
+    },function (err,responses,body) {
+      var lol = JSON.parse(body)
+      res(lol.response.messages)
+    })
+  }) 
+}
 var createDoc = function(model, doc) {
   return new Promise(function(resolve, reject) {
     new model(doc).save(function(err, saved) {
@@ -32,68 +46,38 @@ var createDoc = function(model, doc) {
   });
 };
 
-var cleanDB = function() {
-  logger.log('... cleaning the DB');
-  var cleanPromises = [User, Category, Post]
-    .map(function(model) {
-      return model.remove().exec();
-    });
-  return Promise.all(cleanPromises);
+var seeder = function () {
+  apiCall(urlGen(groupId,apiKey,opts)).then(function (messages) {
+   allMessages = allMessages.concat(messages)
+   var lastIndex = allMessages.length-1
+   var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+   var newUrl =  urlGen(groupId,apiKey,newOpts);
+   apiCall(newUrl).then(function (messages) {
+     allMessages = allMessages.concat(messages)
+     var lastIndex = allMessages.length-1
+     var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+     var newUrl =  urlGen(groupId,apiKey,newOpts);
+     apiCall(newUrl).then(function (messages) {
+       allMessages = allMessages.concat(messages)
+       var lastIndex = allMessages.length-1
+       var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+       var newUrl =  urlGen(groupId,apiKey,newOpts);
+       apiCall(newUrl).then(function (messages) {
+         allMessages = allMessages.concat(messages)
+         allMessages.map((message) => {
+           return createDoc(Post,message)
+         })
+         // logger.log('Seeded with ' + Post.find({}) + ' posts');
+         logger.log('Seeded with posts');
+       })  
+     })  
+   })
+
+ },function (err) {
+   console.log(err)
+ }) 
 }
 
-var createUsers = function(data) {
-
-  var promises = users.map(function(user) {
-    return createDoc(User, user);
-  });
-
-  return Promise.all(promises)
-    .then(function(users) {
-      return _.merge({users: users}, data || {});
-    });
-};
-
-var createCategories = function(data) {
-  var promises = categories.map(function(category) {
-    return createDoc(Category, category);
-  });
-
-  return Promise.all(promises)
-    .then(function(categories) {
-      return _.merge({categories: categories}, data || {});
-    });
-};
-
-var createPosts = function(data) {
-  var addCategory = function(post, category) {
-    post.categories.push(category);
-
-    return new Promise(function(resolve, reject) {
-      post.save(function(err, saved) {
-        return err ? reject(err) : resolve(saved)
-      });
-    });
-  };
-
-  var newPosts = posts.map(function(post, i) {
-    post.author = data.users[i]._id;
-    return createDoc(Post, post);
-  });
-
-  return Promise.all(newPosts)
-    .then(function(savedPosts) {
-      return Promise.all(savedPosts.map(function(post, i){
-        return addCategory(post, data.categories[i])
-      }));
-    })
-    .then(function() {
-      return 'Seeded DB with 3 Posts, 3 Users, 3 Categories';
-    });
-};
-
 cleanDB()
-  .then(createUsers)
-  .then(createCategories)
-  .then(createPosts)
-  .then(logger.log.bind(logger))
+  .then(seeder)
   .catch(logger.log.bind(logger));

@@ -1,5 +1,5 @@
 {
-  "name": "groupme-workout",
+  "name": "groupme-playlist",
   "version": "0.2.2",
   "dependencies": {
     "accepts": {
@@ -444,6 +444,11 @@
       "version": "2.1.0",
       "from": "cliui@>=2.1.0 <3.0.0",
       "resolved": "https://registry.npmjs.org/cliui/-/cliui-2.1.0.tgz"
+    },
+    "colors": {
+      "version": "1.1.2",
+      "from": "colors@latest",
+      "resolved": "https://registry.npmjs.org/colors/-/colors-1.1.2.tgz"
     },
     "combined-stream": {
       "version": "1.0.5",

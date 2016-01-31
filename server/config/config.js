@@ -1,9 +1,6 @@
 var _ = require('lodash');
 var config = {};
 
-config.
-config.
-
 module.exports = config;
 var config = {
   dev: 'development',

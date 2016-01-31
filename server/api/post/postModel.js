@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+import mongoose from 'mongoose'
+const Schema = mongoose.Schema;
 
-var PostSchema = new Schema({
+const PostSchema = new Schema({
   attachments:{
     type:[]
-  }
+  },
   avatar_url:{
     type:String
   },
@@ -18,7 +18,8 @@ var PostSchema = new Schema({
     type:String
   },
   id:{
-    type:String
+    type:String,
+    unique:true
   },
   name:{
     type:String
@@ -33,7 +34,8 @@ var PostSchema = new Schema({
     type:String
   },
   text:{
-    type:String
+    type:String,
+    validate: /^(ftp:\/\/|http:\/\/|https:\/\/)/i
   },
   user_id:{
     type:String
