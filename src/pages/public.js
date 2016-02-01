@@ -12,7 +12,7 @@ export default React.createClass({
 		console.log(posts)
 		if (posts){
 			postHtml = posts.map((post)=>
-								<li key={post.id}><span className="octicon octicon-post"></span>   <a href={post.text}>{post.text}</a></li>)
+								<li key={post.id}><span className="octicon octicon-post"></span>   <a target="_blank" href={post.text}>{post.text}</a></li>)
 							
 		}else{
 			postHtml = <li>Fuck all</li>;
