@@ -6,7 +6,7 @@ var config = {
   dev: 'development',
   test: 'testing',
   prod: 'production',
-  port: process.env.PORT || 3000,
+  port: process.env.PORT || 5000,
   // 10 days in minutes
   expireTime: 24 * 60 * 10,
   mongoUri: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/rtr',

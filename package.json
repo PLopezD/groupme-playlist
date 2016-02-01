@@ -4,9 +4,9 @@
   "description": "app for tracking songs from my buddies",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "build": "webpack",
-    "deploy": "surge -p public -d labelr.surge.sh"
+    "start": "npm run build && node index.js",
+    "fe": "webpack-dev-server",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
