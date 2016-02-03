@@ -23,7 +23,7 @@ GmeMusicDefiner.prototype.getDesc = function () {
 			desc.description = descString;
 			respond(desc)
 		}	else {
-			desc.description = "no idea"
+			desc.description = undefined
 			respond(desc)
 		}
 	})

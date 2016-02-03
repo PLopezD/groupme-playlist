@@ -12,11 +12,9 @@ export default React.createClass({
 		if (posts){
 			postHtml = posts.map((post)=>{
 				return(<div>
-					<div className="link">	
-					<a target="_blank" href={post.text}>{post.text}
-						<div key={post.id}><span className="octicon octicon-post"></span>   </div>
-						<div>{post.description}</div>
-					</a>
+					<div className="link" key={post.id}> 	
+						<a target="_blank" href={post.text}>{post.description || post.text}
+						</a>
 					</div>
 					<img src={post.avatar_url}></img>		
 					</div>
