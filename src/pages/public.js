@@ -9,16 +9,16 @@ export default React.createClass({
 	render (){
 		let postHtml;
 		const {posts} = this.props;
-		console.log(posts)
 		if (posts){
 			postHtml = posts.map((post)=>{
-				return(
-					<div>	
+				return(<div>
+					<div className="link">	
 					<a target="_blank" href={post.text}>{post.text}
 						<div key={post.id}><span className="octicon octicon-post"></span>   </div>
 						<div>{post.description}</div>
 					</a>
-					<br></br>
+					</div>
+					<img src={post.avatar_url}></img>		
 					</div>
 					)
 			}
