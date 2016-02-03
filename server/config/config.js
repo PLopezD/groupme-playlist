@@ -1,7 +1,7 @@
 var _ = require('lodash');
-var config = {};
+// var config = {};
 
-module.exports = config;
+// module.exports = config;
 var config = {
   dev: 'development',
   test: 'testing',
