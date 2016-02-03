@@ -10,9 +10,9 @@ require('mongoose').connect(config.db.url);
 app.use(express.static('./public'));
 app.use(express.static('./node_modules/bootstrap/dist'));
 
-if (config.seed) {
+// if (config.seed) {
   require('./util/seed');
-}
+// }
 
 // setup the app middlware
 require('./middleware/appMiddlware')(app);

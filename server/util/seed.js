@@ -77,8 +77,7 @@ var seeder = function () {
               return createDoc(Post,postFinal)
             })
           }          
-         // return createDoc(Post,message)
-       })
+        })
          logger.log('Seeded with posts');
        })  
      })  
