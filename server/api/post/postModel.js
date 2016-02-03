@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
@@ -40,7 +41,10 @@ const PostSchema = new Schema({
   user_id:{
     type:String
   },
-  author: {type: Schema.Types.ObjectId, ref: 'user'}
+  description:{
+   type:String
+ },
+ author: {type: Schema.Types.ObjectId, ref: 'user'}
 });
 
 module.exports = mongoose.model('post', PostSchema);

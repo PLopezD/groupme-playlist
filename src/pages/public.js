@@ -11,25 +11,35 @@ export default React.createClass({
 		const {posts} = this.props;
 		console.log(posts)
 		if (posts){
-			postHtml = posts.map((post)=>
-								<li key={post.id}><span className="octicon octicon-post"></span>   <a target="_blank" href={post.text}>{post.text}</a></li>)
-							
+			postHtml = posts.map((post)=>{
+				return(
+					<div>	
+					<a target="_blank" href={post.text}>{post.text}
+						<div key={post.id}><span className="octicon octicon-post"></span>   </div>
+						<div>{post.description}</div>
+					</a>
+					<br></br>
+					</div>
+					)
+			}
+			)
+
 		}else{
 			postHtml = <li>Fuck all</li>;
 		}
 		return (
 			<ClickHandler className='container'>
-				<header role='banner'>
-					<h1>GMe Playlist 1.0</h1>
-				</header>
-					<div>
-						<h2>Beats</h2>
-						<ul>	
-							{postHtml}
-						</ul>
-					</div>
+			<header role='banner'>
+			<h1>GMe Playlist 1.0</h1>
+			</header>
+			<div>
+			<h2>Beats</h2>
+			<ul>	
+			{postHtml}
+			</ul>
+			</div>
 			</ClickHandler>
-						)	
+			)	
 	}
 })
 

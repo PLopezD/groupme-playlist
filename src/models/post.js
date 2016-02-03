@@ -15,6 +15,7 @@ export default Model.extend({
 		sender_type:'string',
 		source_guid:'string',
 		text:'string',
+		description:'string',
 		user_id:'string'
 	}
 	

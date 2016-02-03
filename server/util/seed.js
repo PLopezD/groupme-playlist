@@ -5,8 +5,10 @@ var queryString = require('query-string');
 var request = require('request');
 var _ = require('lodash');
 var logger = require('./logger');
+var GmeMusicDefiner = require('./gmemusicdefiner.js')
 
 var groupId = "19001737"
+var urlPattern = new RegExp("^(http|ftp|https)")
 var opts = {limit:'100'}
 var allMessages = []
 
@@ -35,7 +37,10 @@ var apiCall = function (url) {
     },function (err,responses,body) {
       var lol = JSON.parse(body)
       res(lol.response.messages)
-    })
+    },function (err) {
+      rej(err)
+    }
+    )
   }) 
 }
 var createDoc = function(model, doc) {
@@ -65,19 +70,25 @@ var seeder = function () {
        apiCall(newUrl).then(function (messages) {
          allMessages = allMessages.concat(messages)
          allMessages.map((message) => {
-           return createDoc(Post,message)
-         })
-         // logger.log('Seeded with ' + Post.find({}) + ' posts');
+          if (message.text.match(urlPattern)) {
+            var defineMe = new GmeMusicDefiner(message.text)
+            defineMe.getDesc().then(function (final) {
+              var postFinal = _.merge(message,final);
+              return createDoc(Post,postFinal)
+            })
+          }          
+         // return createDoc(Post,message)
+       })
          logger.log('Seeded with posts');
        })  
      })  
    })
 
- },function (err) {
-   console.log(err)
- }) 
+},function (err) {
+ console.log(err)
+}) 
 }
 
 cleanDB()
-  .then(seeder)
-  .catch(logger.log.bind(logger));
+.then(seeder)
+.catch(logger.log.bind(logger));
