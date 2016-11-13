@@ -1,7 +1,10 @@
-import React from 'react'
-import ClickHandler from '../components/clickHandler.js'
-import ampersandMixin from 'ampersand-react-mixin'
+import React from 'react';
+import ampersandMixin from 'ampersand-react-mixin';
+import { LocalCard } from '../components/card';
+import { GridList } from 'material-ui/GridList';
+import AppBar from 'material-ui/AppBar';
 
+require('../styles/main.scss')
 
 export default React.createClass({
 	mixins:[ampersandMixin],
@@ -9,35 +12,47 @@ export default React.createClass({
 	render (){
 		let postHtml;
 		const {posts} = this.props;
-		if (posts){
+		if (posts) {
 			postHtml = posts.map((post)=>{
-				return(<div className='linkContainer'>
-							<div className="link" key={post.id}> 	
-								<a target="_blank" href={post.text}>{post.description || post.text}</a>
-							</div>
-								<img src={post.avatar_url}></img>		
-						</div>
+				return (
+						 <LocalCard post={post} key={post.id} />
 					)
-			}
-			)
-
+				})
 		}else{
-			postHtml = <li>Fuck all</li>;
+			postHtml = <div>Fuck all</div>;
 		}
+
 		return (
-			<ClickHandler className='container'>
-				<header role='banner' className='title'>
-					<h1>GMe Playlist 1.0</h1>
+			<div>
+				<header role='banner' className='banner'>
+					  <AppBar
+    					title="GMe Playlist 2.0"
+            	iconClassNameLeft='no-icon'
+  					/>
 				</header>
-				<div>
-					<ul>	
-					{postHtml}
-					</ul>
+				<div style={styles.root}>	
+					<GridList 
+							cellHeight={450}
+							cols={3}
+      				padding={5}
+      			>
+			      	{ postHtml }
+			    </GridList>
 				</div>
-			</ClickHandler>
+			</div>
 			)	
 	}
 })
 
-
-
+const styles = {
+	gridList: {
+    width: 500,
+    height: 450,
+    overflowY: 'auto'
+  },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+  }
+}

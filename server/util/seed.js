@@ -50,7 +50,6 @@ var createDoc = function(model, doc) {
     });
   });
 };
-
 var seeder = function () {
   apiCall(urlGen(groupId,apiKey,opts)).then(function (messages) {
    allMessages = allMessages.concat(messages)
@@ -74,7 +73,7 @@ var seeder = function () {
             var defineMe = new GmeMusicDefiner(message.text)
             defineMe.getDesc().then(function (final) {
               var postFinal = _.merge(message,final);
-              return createDoc(Post,postFinal)
+              createDoc(Post,postFinal)
             })
           }          
         })

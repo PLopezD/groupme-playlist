@@ -1,8 +1,7 @@
 import React from 'react'
-import ClickHandler from '../components/clickHandler.js'
 
 export default React.createClass({
-	displayName: 'MessagePage',
+	displayName: 'fourOhFour',
 	render (){
 		return (
 			<div>	
@@ -12,6 +11,4 @@ export default React.createClass({
 		)	
 	}
 })
-
-
 

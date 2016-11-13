@@ -1,10 +1,10 @@
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
 import Router from './router'
 import app from 'ampersand-app'
 import User from './models/user.js'
 import PostCollection from './models/post-collection.js'
-
-require('./styles/main.styl')
-
 
 window.app = app;
 
