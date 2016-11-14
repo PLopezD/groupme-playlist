@@ -34,7 +34,7 @@ export default React.createClass({
 					<GridList 
 							cellHeight={450}
 							cols={3}
-      				padding={5}
+      				padding={10}
       			>
 			      	{ postHtml }
 			    </GridList>
