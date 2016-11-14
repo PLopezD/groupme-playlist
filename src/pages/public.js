@@ -7,28 +7,32 @@ import { GmeHeader } from '../components/GmeHeader';
 require('../styles/main.scss')
 
 export default React.createClass({
-	mixins:[ampersandMixin],
-
+  	mixins:[ampersandMixin],
+   getInitialState: function() {
+    return {
+      cols: 3
+    };
+  },
 	render (){
 		let postHtml;
 		const {posts} = this.props;
 		if (posts) {
 			postHtml = posts.map((post)=>{
 				return (
-						 <LocalCard post={post} key={post.id} />
+						 <LocalCard class='test' post={post} key={post.id} />
 					)
 				})
 		}else{
-			postHtml = <div>Fuck all</div>;
+			postHtml = <div>Fuck all, something's broke</div>;
 		}
 
 		return (
       <section> 
         <GmeHeader /> 
-          <div style={styles.root}> 
+          <div className='container'> 
             <GridList 
                 cellHeight={450}
-                cols={3}
+                cols={this.state.cols}
                 padding={10}
               >
                 { postHtml }
@@ -36,18 +40,25 @@ export default React.createClass({
           </div>
       </section> 
 			)	
-	}
-})
-
-const styles = {
-	gridList: {
-    width: 500,
-    height: 450,
-    overflowY: 'auto'
+	},
+  componentDidMount() {
+      window.addEventListener("resize", this.updateDimensions);
   },
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
+  componentWillMount() {
+    const width = window.innerWidth;
+    this.setWidth(width);
+  },
+  updateDimensions(e) {
+    const width = e.target.innerWidth;
+    this.setWidth(width);
+  },
+  setWidth(width) {
+   if (width < 500) {
+      this.setState({cols:1})
+    } else if (width < 750) {
+      this.setState({cols:2})
+    } else {
+      this.setState({cols:3})
+    } 
   }
-}
+})

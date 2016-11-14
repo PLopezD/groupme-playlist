@@ -29,7 +29,7 @@ export class LocalCard extends Component {
               avatar={this.props.post.avatar_url}
             />
             <CardMedia>
-              <iframe height="350" width='300' src={url} frameBorder="0" allowFullScreen></iframe>
+                <span>  iframe here </span>
             </CardMedia>
           </Card>
         </a>
@@ -38,3 +38,5 @@ export class LocalCard extends Component {
   }
 }
 
+
+// <iframe height="350" width='300' src={url} frameBorder="0" allowFullScreen></iframe>
