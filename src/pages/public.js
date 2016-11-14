@@ -2,7 +2,7 @@ import React from 'react';
 import ampersandMixin from 'ampersand-react-mixin';
 import { LocalCard } from '../components/card';
 import { GridList } from 'material-ui/GridList';
-import AppBar from 'material-ui/AppBar';
+import { GmeHeader } from '../components/GmeHeader';
 
 require('../styles/main.scss')
 
@@ -23,23 +23,18 @@ export default React.createClass({
 		}
 
 		return (
-			<div>
-				<header role='banner' className='banner'>
-					  <AppBar
-    					title="GMe Playlist 2.0"
-            	iconClassNameLeft='no-icon'
-  					/>
-				</header>
-				<div style={styles.root}>	
-					<GridList 
-							cellHeight={450}
-							cols={3}
-      				padding={10}
-      			>
-			      	{ postHtml }
-			    </GridList>
-				</div>
-			</div>
+      <section> 
+        <GmeHeader /> 
+          <div style={styles.root}> 
+            <GridList 
+                cellHeight={450}
+                cols={3}
+                padding={10}
+              >
+                { postHtml }
+            </GridList>
+          </div>
+      </section> 
 			)	
 	}
 })
