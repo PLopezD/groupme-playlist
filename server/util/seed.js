@@ -7,10 +7,14 @@ var _ = require('lodash');
 var logger = require('./logger');
 var GmeMusicDefiner = require('./gmemusicdefiner.js')
 
+// group specific seedings
 var groupId = "19001737"
+var createdTime = '1452792784'
+
 var urlPattern = new RegExp("^(http|ftp|https)")
 var opts = {limit:'100'}
 var allMessages = []
+
 
 var urlGen = function (groupId, apiKey,opts) {
   if (Object.keys(opts).length === 1) {
@@ -35,8 +39,8 @@ var apiCall = function (url) {
       method: 'GET',
       headers: {'Content-Type': 'application/json'}
     },function (err,responses,body) {
-      var lol = JSON.parse(body)
-      res(lol.response.messages)
+      var response = JSON.parse(body)
+      res(response.response.messages)
     },function (err) {
       rej(err)
     }
@@ -69,7 +73,7 @@ var seeder = function () {
        apiCall(newUrl).then(function (messages) {
          allMessages = allMessages.concat(messages)
          allMessages.map((message) => {
-          if (message.text.match(urlPattern)) {
+          if (suitableUrl(message.text)) {
             var defineMe = new GmeMusicDefiner(message.text)
             defineMe.getDesc().then(function (final) {
               var postFinal = _.merge(message,final);
@@ -85,6 +89,16 @@ var seeder = function () {
 },function (err) {
  console.log(err)
 }) 
+}
+
+var suitableUrl = function (url) {
+  if ( url.match(urlPattern) 
+        && url.indexOf('grouplayv1') === -1
+        && url.indexOf('404') === -1) {
+    return true
+  } else {
+    return false
+  }
 }
 
 cleanDB()
