@@ -4,10 +4,8 @@ import { LocalCard } from '../components/card';
 import { GridList } from 'material-ui/GridList';
 import { GmeHeader } from '../components/GmeHeader';
 
-require('../styles/main.scss')
-
 export default React.createClass({
-  	mixins:[ampersandMixin],
+  mixins:[ampersandMixin],
    getInitialState: function() {
     return {
       cols: 3

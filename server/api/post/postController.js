@@ -9,7 +9,6 @@ module.exports = {
       .limit(20)
       .sort({created_at: -1})
 		.then(function(posts){
-      console.log(posts)
 			res.json(posts);
 		}, function(err){
 			next(err);

@@ -11,5 +11,4 @@ var finalConfig = getConfig({
     }
   ]
 })
-
 module.exports = finalConfig;

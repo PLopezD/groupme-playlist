@@ -4,9 +4,11 @@ import ReactDOM from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 
-import fourOhFour from './pages/fourOhFour.js'
+import MessagePage from './pages/MessagePage.js'
 import PublicPage from './pages/public.js'
 import app from 'ampersand-app'
+
+require('./styles/main.scss')
 
 export default Router.extend({
 	renderPage(page) { 
@@ -16,18 +18,14 @@ export default Router.extend({
 
 	routes:{
 		'' : 'home',
-		'user' : 'user',
 		'*fourOhFour' : 'fourOhFour'
 	},
 
 	home () {
 		this.renderPage(<PublicPage posts={app.me.posts} />);
 	},
-	user () {
-		this.renderPage(<PublicPage test="lol" posts={app.me.posts} />);
-	},
 	fourOhFour(){
-		this.renderPage(<fourOhFour title="Not Found" body='sorry nothing here'/>)
+		this.renderPage(<MessagePage title="Not Found" body="get out of here turd"/>)
 	}
-
 })
+
