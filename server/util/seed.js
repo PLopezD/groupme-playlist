@@ -8,13 +8,13 @@ var logger = require('./logger');
 var GmeMusicDefiner = require('./gmemusicdefiner.js')
 
 // group specific seedings
-var groupId = "19001737"
-var createdTime = '1452792784'
-
-var urlPattern = new RegExp("^(http|ftp|https)")
-var opts = {limit:'100'}
-var allMessages = []
-
+var groupId = "19001737";
+var createdTime = '1452792784';
+// 
+var urlPattern = new RegExp("^(http|ftp|https)");
+var opts = {limit:'100'};
+var allMessages = [];
+var allPromises = [];
 
 var urlGen = function (groupId, apiKey,opts) {
   if (Object.keys(opts).length === 1) {
@@ -38,15 +38,16 @@ var apiCall = function (url) {
       uri:    url,
       method: 'GET',
       headers: {'Content-Type': 'application/json'}
-    },function (err,responses,body) {
+    }, function (err,responses,body) {
       var response = JSON.parse(body)
       res(response.response.messages)
-    },function (err) {
+    }, function (err) {
       rej(err)
     }
     )
   }) 
 }
+
 var createDoc = function(model, doc) {
   return new Promise(function(resolve, reject) {
     new model(doc).save(function(err, saved) {
@@ -54,8 +55,15 @@ var createDoc = function(model, doc) {
     });
   });
 };
+
 var seeder = function () {
-  apiCall(urlGen(groupId,apiKey,opts)).then(function (messages) {
+
+apiCall(urlGen(groupId,apiKey,opts)).then(function (messages) {
+ allMessages = allMessages.concat(messages)
+ var lastIndex = allMessages.length-1
+ var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+ var newUrl =  urlGen(groupId,apiKey,newOpts);
+ apiCall(newUrl).then(function (messages) {
    allMessages = allMessages.concat(messages)
    var lastIndex = allMessages.length-1
    var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
@@ -72,35 +80,89 @@ var seeder = function () {
        var newUrl =  urlGen(groupId,apiKey,newOpts);
        apiCall(newUrl).then(function (messages) {
          allMessages = allMessages.concat(messages)
-         allMessages.map((message) => {
-          if (suitableUrl(message.text)) {
-            var defineMe = new GmeMusicDefiner(message.text)
-            defineMe.getDesc().then(function (final) {
-              var postFinal = _.merge(message,final);
-              createDoc(Post,postFinal)
-            })
-          }          
-        })
-         logger.log('Seeded with posts');
-       })  
-     })  
-   })
+         var lastIndex = allMessages.length-1
+         var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+         var newUrl =  urlGen(groupId,apiKey,newOpts);
+         apiCall(newUrl).then(function (messages) {
+           allMessages = allMessages.concat(messages)
+           var lastIndex = allMessages.length-1
+           var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+           var newUrl =  urlGen(groupId,apiKey,newOpts);
+           apiCall(newUrl).then(function (messages) {
+             allMessages = allMessages.concat(messages)
+             var lastIndex = allMessages.length-1
+             var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+             var newUrl =  urlGen(groupId,apiKey,newOpts);
+             apiCall(newUrl).then(function (messages) {
+               allMessages = allMessages.concat(messages)
+               var lastIndex = allMessages.length-1
+               var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+               var newUrl =  urlGen(groupId,apiKey,newOpts);
+               apiCall(newUrl).then(function (messages) {
+                 allMessages = allMessages.concat(messages)
+                 var lastIndex = allMessages.length-1
+                 var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+                 var newUrl =  urlGen(groupId,apiKey,newOpts);
+                 apiCall(newUrl).then(function (messages) {
+                   allMessages = allMessages.concat(messages)
+                   var lastIndex = allMessages.length-1
+                   var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+                   var newUrl =  urlGen(groupId,apiKey,newOpts);
+                   apiCall(newUrl).then(function (messages) {
+                     allMessages = allMessages.concat(messages)
+                     var lastIndex = allMessages.length-1
+                     var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+                     var newUrl =  urlGen(groupId,apiKey,newOpts);
+                     apiCall(newUrl).then(function (messages) {
+                       allMessages = allMessages.concat(messages)
+                       var lastIndex = allMessages.length-1
+                       var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+                       var newUrl =  urlGen(groupId,apiKey,newOpts);
+                       apiCall(newUrl).then(function (messages) {
+                         allMessages = allMessages.concat(messages)
+                         var lastIndex = allMessages.length-1
+                         var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+                         var newUrl =  urlGen(groupId,apiKey,newOpts);
+                         apiCall(newUrl).then(function (messages) {
+                           allMessages = allMessages.concat(messages)
+                             allMessages.map((message) => {
+                              if (message.text && suitableUrl(message.text)) {
+                                var defineMe = new GmeMusicDefiner(message.text)
+                                defineMe.getDesc().then(function (final) {
+                                  var postFinal = _.merge(message,final);
+                                  createDoc(Post,postFinal)
+                                })
+                              }          
+                          })
+                         })  
+                       })  
+                    })  
+                  })  
+                })  
+              })  
+            })  
+          })  
+        })  
+      })  
+    })      
+  })   
+})    
 
 },function (err) {
  console.log(err)
 }) 
 }
 
-var suitableUrl = function (url) {
-  if ( url.match(urlPattern) 
-        && url.indexOf('grouplayv1') === -1
-        && url.indexOf('404') === -1) {
+var suitableUrl = function (messageText) {
+  if ( messageText.match(urlPattern) 
+    && messageText.indexOf('grouplayv1') === -1
+    && messageText.indexOf('https://youtu.be/p9j8RGTq') === -1) {
     return true
   } else {
     return false
   }
 }
 
-cleanDB()
-.then(seeder)
-.catch(logger.log.bind(logger));
+// cleanDB()
+// .then(seeder)
+// .catch(logger.log.bind(logger));

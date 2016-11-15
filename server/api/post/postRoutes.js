@@ -6,5 +6,9 @@ var controller = require('./postController');
 router.route('/')
   .get(controller.getRequest)
 
+router.route('/user/:user')
+  .get(controller.getByUser)
+
+
 module.exports = router;
 

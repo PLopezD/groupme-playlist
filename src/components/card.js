@@ -19,17 +19,20 @@ export class LocalCard extends Component {
 
   render () {
     let url = this.makeYouTubeUrl(this.props.post.text);
+    const d = new Date(this.props.post.created_at).toDateString();
+    let subtitle = `${this.props.post.description || this.props.post.text}`
     return (
       <div className='card-container'>
         <a target="_blank" href={this.props.post.text}>
           <Card>
             <CardHeader
               title={this.props.post.name}
-              subtitle={this.props.post.description || this.props.post.text}
+              subtitle={subtitle}
               avatar={this.props.post.avatar_url}
             />
             <CardMedia>
-              <iframe height="350" width='300' src={url} frameBorder="0" allowFullScreen></iframe>
+              <span>  iframe == 
+              </span>  
             </CardMedia>
           </Card>
         </a>
@@ -37,3 +40,5 @@ export class LocalCard extends Component {
     )
   }
 }
+
+// <iframe height="350" width='300' src={url} frameBorder="0" allowFullScreen></iframe>
