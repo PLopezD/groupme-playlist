@@ -14,14 +14,14 @@ var createdTime = '1452792784';
 var urlPattern = new RegExp("^(http|ftp|https)");
 var opts = {limit:'100'};
 var allMessages = [];
-var allPromises = [];
 
-var urlGen = function (groupId, apiKey,opts) {
+var urlGenerator = function (groupId, apiKey,opts) {
   if (Object.keys(opts).length === 1) {
     return "https://api.groupme.com/v3/groups/" + groupId + "/messages?token=" + apiKey + "&" + queryString.stringify(opts);
   }
   return "https://api.groupme.com/v3/groups/" + groupId + "/messages?token=" + apiKey + "&limit=" + opts.limit + "&before_id=" + opts.before_id;  
 }
+
 var cleanDB = function() {
   logger.log('... cleaning the DB');
   var cleanPromises = [Post]
@@ -56,101 +56,41 @@ var createDoc = function(model, doc) {
   });
 };
 
-var seeder = function () {
+var number = 0;
 
-apiCall(urlGen(groupId,apiKey,opts)).then(function (messages) {
- allMessages = allMessages.concat(messages)
- var lastIndex = allMessages.length-1
- var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
- var newUrl =  urlGen(groupId,apiKey,newOpts);
- apiCall(newUrl).then(function (messages) {
-   allMessages = allMessages.concat(messages)
-   var lastIndex = allMessages.length-1
-   var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-   var newUrl =  urlGen(groupId,apiKey,newOpts);
-   apiCall(newUrl).then(function (messages) {
-     allMessages = allMessages.concat(messages)
-     var lastIndex = allMessages.length-1
-     var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-     var newUrl =  urlGen(groupId,apiKey,newOpts);
-     apiCall(newUrl).then(function (messages) {
-       allMessages = allMessages.concat(messages)
-       var lastIndex = allMessages.length-1
-       var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-       var newUrl =  urlGen(groupId,apiKey,newOpts);
-       apiCall(newUrl).then(function (messages) {
-         allMessages = allMessages.concat(messages)
-         var lastIndex = allMessages.length-1
-         var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-         var newUrl =  urlGen(groupId,apiKey,newOpts);
-         apiCall(newUrl).then(function (messages) {
-           allMessages = allMessages.concat(messages)
-           var lastIndex = allMessages.length-1
-           var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-           var newUrl =  urlGen(groupId,apiKey,newOpts);
-           apiCall(newUrl).then(function (messages) {
-             allMessages = allMessages.concat(messages)
-             var lastIndex = allMessages.length-1
-             var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-             var newUrl =  urlGen(groupId,apiKey,newOpts);
-             apiCall(newUrl).then(function (messages) {
-               allMessages = allMessages.concat(messages)
-               var lastIndex = allMessages.length-1
-               var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-               var newUrl =  urlGen(groupId,apiKey,newOpts);
-               apiCall(newUrl).then(function (messages) {
-                 allMessages = allMessages.concat(messages)
-                 var lastIndex = allMessages.length-1
-                 var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-                 var newUrl =  urlGen(groupId,apiKey,newOpts);
-                 apiCall(newUrl).then(function (messages) {
-                   allMessages = allMessages.concat(messages)
-                   var lastIndex = allMessages.length-1
-                   var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-                   var newUrl =  urlGen(groupId,apiKey,newOpts);
-                   apiCall(newUrl).then(function (messages) {
-                     allMessages = allMessages.concat(messages)
-                     var lastIndex = allMessages.length-1
-                     var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-                     var newUrl =  urlGen(groupId,apiKey,newOpts);
-                     apiCall(newUrl).then(function (messages) {
-                       allMessages = allMessages.concat(messages)
-                       var lastIndex = allMessages.length-1
-                       var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-                       var newUrl =  urlGen(groupId,apiKey,newOpts);
-                       apiCall(newUrl).then(function (messages) {
-                         allMessages = allMessages.concat(messages)
-                         var lastIndex = allMessages.length-1
-                         var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
-                         var newUrl =  urlGen(groupId,apiKey,newOpts);
-                         apiCall(newUrl).then(function (messages) {
-                           allMessages = allMessages.concat(messages)
-                             allMessages.map((message) => {
-                              if (message.text && suitableUrl(message.text)) {
-                                var defineMe = new GmeMusicDefiner(message.text)
-                                defineMe.getDesc().then(function (final) {
-                                  var postFinal = _.merge(message,final);
-                                  createDoc(Post,postFinal)
-                                })
-                              }          
-                          })
-                         })  
-                       })  
-                    })  
-                  })  
-                })  
-              })  
-            })  
-          })  
-        })  
-      })  
-    })      
-  })   
-})    
+var keepGettingMessages = function (messages) {
+    number++  
+    if (number > 30) {
+      return pushToMongo(allMessages)
+    } else {
+      allMessages = allMessages.concat(messages)
+      var lastIndex = allMessages.length-1
+      var newOpts = _.merge(opts,{before_id: allMessages[lastIndex].id});
+      var newUrl =  urlGenerator(groupId,apiKey,newOpts);
+      return apiCall(newUrl).then(function(messages){
+        keepGettingMessages(messages);
+      })
+    }
+  }
 
-},function (err) {
- console.log(err)
-}) 
+
+var getAllMessages = function () {
+  var initialUrl = urlGenerator(groupId,apiKey,opts);
+  return apiCall(initialUrl).then(function(messages){
+      return keepGettingMessages(messages)
+  })
+}
+
+var pushToMongo = function(messages) {
+  messages.map((message) => {
+    if (message.text && suitableUrl(message.text)) {
+      var defineMe = new GmeMusicDefiner(message.text)
+      defineMe.getDesc().then(function (final) {
+        var postFinal = _.merge(message,final);
+        createDoc(Post,postFinal)
+      })
+    }          
+  })
 }
 
 var suitableUrl = function (messageText) {
@@ -163,6 +103,7 @@ var suitableUrl = function (messageText) {
   }
 }
 
-// cleanDB()
-// .then(seeder)
-// .catch(logger.log.bind(logger));
+cleanDB()
+.then(getAllMessages)
+.then(logger.log('Added posts'))
+.catch(logger.log.bind(logger));
