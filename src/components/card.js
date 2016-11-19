@@ -31,7 +31,8 @@ export class LocalCard extends Component {
               avatar={this.props.post.avatar_url}
             />
             <CardMedia>
-              <span>  iframe == 
+              <span>
+                iframe 
               </span>  
             </CardMedia>
           </Card>

@@ -1,6 +1,6 @@
 var request = require('request'),
-	cheerio = require('cheerio'),
-	URI = require('uri-js')
+  	cheerio = require('cheerio'),
+	  URI = require('uri-js')
 
 var GmeMusicDefiner = function (url) {
 	this.url = url;
@@ -15,7 +15,7 @@ GmeMusicDefiner.prototype.getDesc = function () {
 
 			me.metaFetch().then(function (final) {
 				desc.description = final
-				respond(desc)
+				respond(desc)	
 			})
 		} else if (parsedUrlHost.match("soundcloud")){
 			urlArray = me.url.split('/')
@@ -37,9 +37,16 @@ GmeMusicDefiner.prototype.metaFetch = function () {
 			headers: {'Content-Type': 'application/json'}}
 
 			request(options,function (req,response,body) {
-				var doc = cheerio.load(body);
-				var title = doc('head > title').text();
-				res(title)
+				try {
+					var doc = cheerio.load(body);
+					var title = doc('head > title').text();
+					res(title)
+					}
+					catch (e) {
+					   console.log(e);
+					   res({description:"Something's fucky"});
+					}
+
 			},function (err) {
 				rej(err)
 			}

@@ -3,12 +3,15 @@ import ampersandMixin from 'ampersand-react-mixin';
 import { LocalCard } from '../components/card';
 import { GridList } from 'material-ui/GridList';
 import { GmeHeader } from '../components/GmeHeader';
+import { GmeBottom } from '../components/GmeBottom';
 
 export default React.createClass({
   mixins:[ampersandMixin],
    getInitialState: function() {
     return {
-      cols: 3
+      cols: 3,
+      offset:0,
+      fetch:true
     };
   },
 	render (){
@@ -21,7 +24,7 @@ export default React.createClass({
 					)
 				})
 		}else{
-			postHtml = <div>Fuck all, something's broke</div>;
+      postHtml = <div>Fuck all, something's broke</div>;
 		}
 
 		return (
@@ -36,15 +39,22 @@ export default React.createClass({
                 { postHtml }
             </GridList>
           </div>
+          <GmeBottom fetch={this.state.fetch}/>
       </section> 
 			)	
 	},
   componentDidMount() {
       window.addEventListener("resize", this.updateDimensions);
+      window.addEventListener("scroll", this.fetchMore);
   },
   componentWillMount() {
     const width = window.innerWidth;
     this.setWidth(width);
+  },
+  fetchMore() {
+    if (window.scrollY - 4500 > window.innerHeight) {
+      console.log(this)
+    }
   },
   updateDimensions(e) {
     const width = e.target.innerWidth;
