@@ -23,12 +23,12 @@ export default Router.extend({
 	},
 
 	home () {
-		this.renderPage(<PublicPage posts={app.me.posts} />);
+		this.renderPage(<PublicPage posts={app.me.posts}  fetchMoreData={app.me.fetchData} />);
 	},
-	user (userId) {
-		app.fetch()
-		this.renderPage(<PublicPage  posts={app.me.posts} />);
-	},
+	// user (userId) {
+	// 	app.fetch()
+	// 	this.renderPage(<PublicPage  posts={app.me.posts}/>);
+	// },
 	fourOhFour(){
 		this.renderPage(<MessagePage title="Not Found" body="get out of here turd"/>)
 	}

@@ -44,18 +44,33 @@ export default React.createClass({
 			)	
 	},
   componentDidMount() {
-      window.addEventListener("resize", this.updateDimensions);
-      window.addEventListener("scroll", this.fetchMore);
+    this.scrollTimer = null;
+    window.addEventListener("resize", this.updateDimensions);
+    window.addEventListener("scroll", this.scrollCheck);
+
   },
   componentWillMount() {
     const width = window.innerWidth;
     this.setWidth(width);
   },
-  fetchMore() {
-    if (window.scrollY - 4500 > window.innerHeight) {
-      console.log(this)
+  scrollCheck() {
+   if (this.scrollTimer) {
+        clearTimeout(this.scrollTimer);   // clear any previous pending timer
     }
+    this.scrollTimer = setTimeout(() => {
+      if (window.scrollY - 1500 > window.innerHeight) {
+       this.fetchMore();
+      }
+    }, 500); 
+    
   },
+  fetchMore() {
+    console.log('in fetch more')
+    this.setState({offset:this.state.offset + 1})
+    console.log({offset:this.state.offset});
+    this.props.posts.fetch({data:{offset:this.state.offset}})
+  },
+
   updateDimensions(e) {
     const width = e.target.innerWidth;
     this.setWidth(width);
