@@ -23,7 +23,7 @@ export default Router.extend({
 	},
 
 	home () {
-		this.renderPage(<PublicPage posts={app.me.posts}  fetchMoreData={app.me.fetchData} />);
+		this.renderPage(<PublicPage posts={app.me.posts} user={app.me}/>);
 	},
 	// user (userId) {
 	// 	app.fetch()

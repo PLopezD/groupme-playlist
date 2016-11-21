@@ -10,7 +10,6 @@ module.exports = {
       query.user_id = req.query.user_id
     }
     let limit = 20
-
 		Post.find(query)
       .limit(limit)
       .sort({created_at: -1})

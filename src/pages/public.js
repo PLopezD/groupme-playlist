@@ -18,9 +18,10 @@ export default React.createClass({
 		let postHtml;
 		const {posts} = this.props;
 		if (posts) {
-			postHtml = posts.map((post)=>{
+			postHtml = posts.map((post,i)=>{
 				return (
-						 <LocalCard class='test' post={post} key={post.id} />
+
+						 <LocalCard class='test' post={post} key={i} />
 					)
 				})
 		}else{
@@ -67,8 +68,7 @@ export default React.createClass({
   fetchMore() {
     console.log('in fetch more')
     this.setState({offset:this.state.offset + 1})
-    console.log({offset:this.state.offset});
-    this.props.posts.fetch({data:{offset:this.state.offset}})
+    this.props.user.fetchData({offset:this.state.offset})
   },
 
   updateDimensions(e) {

@@ -6,6 +6,12 @@ export default Model.extend({
 		posts:PostCollection
 	},
 	fetchData(params){
-		this.posts.fetch({data:params})
+    if (this.posts.length === 0) {
+		  this.posts.fetch({data:params})
+    } else {
+      let endOfCollectionIndex = this.posts.length
+      this.posts.fetch({data:params})
+      // this.posts.add({data:params},{at:endOfCollectionIndex, merge:true})
+    }
 	}
 })

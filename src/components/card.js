@@ -6,6 +6,7 @@ export class LocalCard extends Component {
     super();
   }
   makeYouTubeUrl(url) {
+    if (!url) { return 'somethings wrong in the url'}
     let iframeUrl;
     if (url.indexOf('youtu.be/') != -1) {
       const lastSlash = url.lastIndexOf('/');
