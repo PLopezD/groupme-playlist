@@ -11,7 +11,7 @@ module.exports = {
     }
     let limit = 20
 		Post.find(query)
-      .limit(limit)
+      // .limit(limit)
       .sort({created_at: -1})
       .skip(Number(req.query.offset) * 20)
 		.then(function(posts){

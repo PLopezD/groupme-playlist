@@ -11,7 +11,7 @@ window.app = app;
 app.extend({
 	init () {
 		this.me = new User();
-		this.me.fetchData({user_id:12556176});
+		this.me.fetchData();
 		this.router = new Router();
 		this.router.history.start();
 	}
@@ -20,3 +20,4 @@ app.extend({
 app.init()
 
 
+// {user_id:12556176}
