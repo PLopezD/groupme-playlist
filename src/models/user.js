@@ -11,8 +11,5 @@ export default Model.extend({
     } else {
 		  this.posts.fetch()
     }
-	},
-  getPage(offset) {
-    
-  }
+	}
 })

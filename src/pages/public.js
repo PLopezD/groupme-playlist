@@ -14,23 +14,27 @@ export default React.createClass({
       fetch:true
     };
   },
-	render (){
+	render () {
 		let postHtml;
-		const {posts} = this.props;
+		const { posts } = this.props;
 		if (posts) {
 			postHtml = posts.map((post,i)=>{
 				return (
-
 						 <LocalCard class='test' post={post} key={i} />
 					)
 				})
-		}else{
+		} else {
       postHtml = <div>Fuck all, something's broke</div>;
-		}
+		};
+
+    let title;
+    if (this.props.posts.models.length != 0 && this.props.user) { 
+      title = this.props.posts.models[0]._values
+    }
 
 		return (
       <section> 
-        <GmeHeader /> 
+        <GmeHeader user={title}/> 
           <div className='container'> 
             <GridList 
                 cellHeight={450}

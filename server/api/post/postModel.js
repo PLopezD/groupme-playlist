@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+var mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise;
 
@@ -15,7 +15,7 @@ const PostSchema = new Schema({
     type:String
   },
   favorited_by:{
-    type:String
+    type: [String]
   },
   group_id:{
     type:String

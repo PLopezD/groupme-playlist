@@ -18,6 +18,4 @@ app.extend({
 })
 
 app.init()
-
-
 // {user_id:12556176}

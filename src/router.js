@@ -15,22 +15,24 @@ export default Router.extend({
 		let MuiPage = (<MuiThemeProvider>{page}</MuiThemeProvider>)
 		ReactDOM.render(MuiPage, document.body);
 	},
-
 	routes: {
 		'' : 'home',
 		'user/:user': 'user',
+		'likey/:user': 'likey',
 		'*fourOhFour' : 'fourOhFour'
 	},
-
 	home () {
-		this.renderPage(<PublicPage posts={app.me.posts} user={app.me}/>);
+		this.renderPage(<PublicPage posts={app.me.posts}/>);
 	},
-	// user (userId) {
-	// 	app.fetch()
-	// 	this.renderPage(<PublicPage  posts={app.me.posts}/>);
-	// },
+	user (userId) {
+		app.me.fetchData({user_id:userId});
+		this.renderPage(<PublicPage user='true' posts={app.me.posts}/>);
+	},
+	likey (userId) {
+		app.me.fetchData({user_id:userId});
+		this.renderPage(<PublicPage user='true' liked='true' posts={app.me.posts}/>);
+	},
 	fourOhFour(){
 		this.renderPage(<MessagePage title="Not Found" body="get out of here turd"/>)
 	}
 })
-
