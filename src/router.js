@@ -22,17 +22,18 @@ export default Router.extend({
 		'*fourOhFour' : 'fourOhFour'
 	},
 	home () {
+		app.me.fetchData()
 		this.renderPage(<PublicPage posts={app.me.posts}/>);
 	},
 	user (userId) {
 		app.me.fetchData({user_id:userId});
-		this.renderPage(<PublicPage user='true' posts={app.me.posts}/>);
+		this.renderPage(<PublicPage user={userId} likey={true} posts={app.me.posts}/>);
 	},
 	likey (userId) {
-		app.me.fetchData({user_id:userId});
-		this.renderPage(<PublicPage user='true' liked='true' posts={app.me.posts}/>);
+		app.me.fetchData({favorited_by:userId});
+		this.renderPage(<PublicPage user={userId} posts={app.me.posts}/>);
 	},
-	fourOhFour(){
+	fourOhFour() {
 		this.renderPage(<MessagePage title="Not Found" body="get out of here turd"/>)
 	}
 })

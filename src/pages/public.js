@@ -2,7 +2,7 @@ import React from 'react';
 import ampersandMixin from 'ampersand-react-mixin';
 import { LocalCard } from '../components/card';
 import { GridList } from 'material-ui/GridList';
-import { GmeHeader } from '../components/GmeHeader';
+import GmeHeader from '../components/GmeHeader';
 import { GmeBottom } from '../components/GmeBottom';
 
 export default React.createClass({
@@ -26,15 +26,10 @@ export default React.createClass({
 		} else {
       postHtml = <div>Fuck all, something's broke</div>;
 		};
-
-    let title;
-    if (this.props.posts.models.length != 0 && this.props.user) { 
-      title = this.props.posts.models[0]._values
-    }
-
+    
 		return (
       <section> 
-        <GmeHeader user={title}/> 
+        <GmeHeader {...this.props} /> 
           <div className='container'> 
             <GridList 
                 cellHeight={450}
@@ -44,15 +39,15 @@ export default React.createClass({
                 { postHtml }
             </GridList>
           </div>
-          <GmeBottom fetch={this.state.fetch}/>
+          <GmeBottom fetch={this.props.posts.length === 0 }/>
       </section> 
 			)	
 	},
   componentDidMount() {
     this.scrollTimer = null;
     window.addEventListener("resize", this.updateDimensions);
-    window.addEventListener("scroll", this.scrollCheck);
-
+    // commented out cause fuck pagination
+    // window.addEventListener("scroll", this.scrollCheck);
   },
   componentWillMount() {
     const width = window.innerWidth;

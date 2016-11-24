@@ -7,7 +7,7 @@ export default Model.extend({
 	props:{
 		avatar_url:'string',
 		created_at:'string',
-		favorited_by:'string',
+		favorited_by:'array',
 		group_id:'string',
 		id:'string',
 		name:'string',

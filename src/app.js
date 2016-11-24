@@ -11,7 +11,6 @@ window.app = app;
 app.extend({
 	init () {
 		this.me = new User();
-		this.me.fetchData();
 		this.router = new Router();
 		this.router.history.start();
 	}
