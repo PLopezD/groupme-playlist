@@ -103,7 +103,7 @@ var suitableUrl = function (messageText) {
   }
 }
   
-cleanDB()
-.then(getAllMessages)
-.then(logger.log('Added posts'))
-.catch(logger.log.bind(logger));
+// cleanDB()
+// .then(getAllMessages)
+// .then(logger.log('Added posts'))
+// .catch(logger.log.bind(logger));

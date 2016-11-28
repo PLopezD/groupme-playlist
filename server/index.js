@@ -8,6 +8,7 @@ var path = require('path');
 require('mongoose').connect(config.db.url);
 
 app.use(express.static('./public'));
+
 app.use(express.static('./node_modules/bootstrap/dist'));
 
 // if (config.seed) {
@@ -21,9 +22,14 @@ app.get('/', function(req, res){
   res.render('index.html');
 });
 
+
 // setup the api
 app.use('/api', api);
-// set up global error handling
+
+app.get('*', function(req, res){
+  res.render('index.html');
+  console.log(res.render)
+});
 
 
 
