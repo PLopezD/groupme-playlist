@@ -22,16 +22,13 @@ app.get('/', function(req, res){
   res.render('index.html');
 });
 
-
 // setup the api
 app.use('/api', api);
 
 app.get('*', function(req, res){
-  res.render('index.html');
-  console.log(res.render)
+      res.sendfile('./public/index.html');
+
 });
-
-
 
 app.use(function(err, req, res, next) {
   // if error thrown from jwt validation check
