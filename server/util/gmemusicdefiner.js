@@ -1,3 +1,5 @@
+import { log } from 'util';
+
 var request = require('request'),
   	cheerio = require('cheerio'),
 	  URI = require('uri-js')
@@ -36,11 +38,13 @@ GmeMusicDefiner.prototype.metaFetch = function () {
 			gzip : true, 
 			headers: {'Content-Type': 'application/json'}}
 
-			request(options,function (req,response,body) {
+			request(options,function (req ,response ,body) {
 				try {
-					var doc = cheerio.load(body);
-					var title = doc('head > title').text();
-					res(title)
+						if (body) {
+							var doc = cheerio.load(body);
+							var title = doc('head > title').text();
+							res(title)
+						}
 					}
 					catch (e) {
 					   console.log(e);

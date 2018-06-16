@@ -51,7 +51,8 @@
     "lodash.merge": "^3.3.1",
     "lodash.pick": "^3.1.0",
     "lodash.result": "^3.1.2",
-    "material-ui": "^0.16.2",
+    "material-ui": "0.16.3",
+    
     "method-override": "^2.3.5",
     "milliseconds": "^1.0.3",
     "mongoose": "^4.3.7",
@@ -66,7 +67,7 @@
     "react": "^15.4.0",
     "react-dom": "^15.4.0",
     "react-hot-loader": "^1.2.7",
-    "react-tap-event-plugin": "git+https://github.com/zilverline/react-tap-event-plugin.git#master",
+    "react-tap-event-plugin": "^2.0.1",
     "request": "^2.69.0",
     "resource-router-middleware": "^0.5.1",
     "sass-loader": "^4.0.2",

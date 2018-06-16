@@ -10,7 +10,7 @@ var config = {
   // 10 days in minutes
   expireTime: 24 * 60 * 10,
   mongoUri: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/rtr',
-  accessCode: "193e9310caa601320bde62ca9c03ce01"
+  accessCode: "24686470de420135b37b01b8540defb2"
 };
 
 process.env.NODE_ENV = process.env.NODE_ENV || config.dev;

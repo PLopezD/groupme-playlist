@@ -8,7 +8,7 @@ export const GmeBottom = (props) => (
     paddingBottom:'20px',
     paddingTop:'20px'
   }}>
-    {props.fetch ? <aside>Wait one second asshole...<LinearProgress mode="indeterminate" /> </aside>  : <span>That's all folks</span>}
+    {props.fetch ? <aside>Wait one second...<LinearProgress mode="indeterminate" /> </aside>  : <span>That's all folks</span>}
   </section>
 )
 

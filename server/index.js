@@ -1,3 +1,5 @@
+import { log } from 'util';
+
 var express = require('express');
 var app = express();
 var api = require('./api/api');
@@ -25,9 +27,11 @@ app.get('/', function(req, res){
 // setup the api
 app.use('/api', api);
 
-app.get('*', function(req, res){
-      res.sendfile('./public/index.html');
 
+
+
+app.get('*', function(req, res){
+  res.sendfile('./public/index.html');
 });
 
 app.use(function(err, req, res, next) {
