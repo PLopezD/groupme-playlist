@@ -40,8 +40,6 @@ var apiCall = function (url) {
       headers: {'Content-Type': 'application/json'}
     }, function (err,responses,body) {
       var response = JSON.parse(body)
-      console.log(response);
-      
       res(response.response.messages)
     }, function (err) {
       rej(err)
