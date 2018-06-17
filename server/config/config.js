@@ -14,6 +14,8 @@ var config = {
   mongoUri: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/rtr',
   accessCode: process.env.GROUPME_API_KEY
 };
+console.log(process.env);
+
 console.log(config.accessCode);
 
 
